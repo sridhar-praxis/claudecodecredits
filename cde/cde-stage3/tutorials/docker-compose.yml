@@ -1,0 +1,18 @@
+services:
+  localstack:
+    container_name: cde-stage3-localstack
+    image: localstack/localstack:latest
+    ports:
+      - "127.0.0.1:4566:4566"   # the one endpoint every exercise talks to
+    environment:
+      - LOCALSTACK_AUTH_TOKEN=${LOCALSTACK_AUTH_TOKEN:?Missing LOCALSTACK_AUTH_TOKEN - see Lab Guide Setup Step 6}
+      - SERVICES=s3,sqs,sns
+      - DEBUG=0
+      - SQS_ENDPOINT_STRATEGY=off   # pins queue URLs to the simple localhost:4566/<account>/<queue> form,
+                                    # so they look the same on every LocalStack version this stage supports
+    volumes:
+      - "cde_stage3_localstack_data:/var/lib/localstack"
+
+volumes:
+  cde_stage3_localstack_data:
+    name: cde_stage3_localstack_data
